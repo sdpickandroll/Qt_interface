@@ -12,6 +12,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
     lipo_watcher = new QFileSystemWatcher(this);
     lipo_watcher->addPath("../Qt_interface/resources/data/lipo_levels.txt");
     connect(lipo_watcher, SIGNAL(fileChanged(QString)), this, SLOT(readlipo()));
@@ -24,12 +25,17 @@ MainWindow::MainWindow(QWidget *parent) :
     input_state_watcher->addPath("../Qt_interface/resources/data/input_state.txt");
     connect(input_state_watcher, SIGNAL(fileChanged(QString)), this, SLOT(readinputstate()));
 
+//    debug_watcher = new QFileSystemWatcher(this);
+//    debug_watcher->addPath("../Qt_interface/resources/data/debug.txt");
+//    connect(debug_watcher, SIGNAL(fileChanged(QString)), this, SLOT(readdebug(QStringList)));
+
     //placeholder for video
     QPixmap ron("../Qt_interface/resources/data/ronny_boi.jpg");
     ui->video_label->setPixmap(ron.scaled(ui->video_label->width(), ui->video_label->height(), Qt::KeepAspectRatio));
 
 
 }
+
 
 MainWindow::~MainWindow()
 {
@@ -72,7 +78,6 @@ void MainWindow::readinputstate()
     }
     QTextStream in(&file);
     QString text = in.readAll();
-    qDebug() << text;
 
     QRegExp rx("forward: |\\nbackward: |\\ncw: |\\nccw: ");
     QStringList state_list = text.split(rx, QString::SkipEmptyParts);
@@ -108,6 +113,21 @@ void MainWindow::readinputstate()
 
     file.close();
 }
+
+//QStringList MainWindow::readdebug(QStringList debug_list)
+//{
+//    qDebug("fuck");
+//    QFile file("../Qt_interface/resources/data/debug.txt");
+//    if (!file.open(QFile::ReadOnly | QFile::Text)){
+//        qDebug() << "couldnt read file";
+//    }
+//    QTextStream in(&file);
+//    QString line = in.readAll();
+//    debug_list << line;
+//    qDebug() << debug_list;
+
+//    return debug_list;
+//}
 
 
 void MainWindow::on_debugButton_clicked()

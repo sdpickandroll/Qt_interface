@@ -21,6 +21,7 @@ public slots:
     void readlipo();
     void readplatform();
     void readinputstate();
+//    QStringList readdebug(QStringList debug_list);
 
 private slots:
     void on_debugButton_clicked();
@@ -30,6 +31,8 @@ private:
     QFileSystemWatcher *lipo_watcher;
     QFileSystemWatcher *platform_watcher;
     QFileSystemWatcher *input_state_watcher;
+    QFileSystemWatcher *debug_watcher;
+//    static QStringList the_debug_list;
 
 };
 
