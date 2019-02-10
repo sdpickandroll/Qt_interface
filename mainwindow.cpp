@@ -5,24 +5,31 @@
 #include <QTextStream>
 #include <QDebug>
 #include <QPixmap>
+#include <QDir>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-
     lipo_watcher = new QFileSystemWatcher(this);
-    lipo_watcher->addPath("C:/Users/glach/Desktop/griffins_best_effort/resources/data/lipo_levels.txt");
+    lipo_watcher->addPath("../Qt_interface/resources/data/lipo_levels.txt");
     connect(lipo_watcher, SIGNAL(fileChanged(QString)), this, SLOT(readlipo()));
 
     platform_watcher = new QFileSystemWatcher(this);
-    platform_watcher->addPath("C:/Users/glach/Desktop/griffins_best_effort/resources/data/platform_levels.txt");
+    platform_watcher->addPath("../Qt_interface/resources/data/platform_levels.txt");
     connect(platform_watcher, SIGNAL(fileChanged(QString)), this, SLOT(readplatform()));
 
     input_state_watcher = new QFileSystemWatcher(this);
-    input_state_watcher->addPath("C:/Users/glach/Desktop/griffins_best_effort/resources/data/input_state.txt");
+    input_state_watcher->addPath("../Qt_interface/resources/data/input_state.txt");
     connect(input_state_watcher, SIGNAL(fileChanged(QString)), this, SLOT(readinputstate()));
+
+    //placeholder for video
+    int video_width = ui->video_label->width();
+    int video_height = ui->video_label->height();
+    QPixmap ron("../Qt_interface/resources/data/ronny_boi.jpg");
+    ui->video_label->setPixmap(ron.scaled(video_width, video_height));
+
 
 }
 
@@ -33,7 +40,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::readlipo()
 {
-    QFile file("C:/Users/glach/Desktop/griffins_best_effort/resources/data/lipo_levels.txt");
+    QFile file("../Qt_interface/resources/data/lipo_levels.txt");
     if (!file.open(QFile::ReadOnly | QFile::Text)){
         qDebug() << "couldnt read file";
     }
@@ -47,7 +54,7 @@ void MainWindow::readlipo()
 }
 void MainWindow::readplatform()
 {
-    QFile file("C:/Users/glach/Desktop/griffins_best_effort/resources/data/platform_levels.txt");
+    QFile file("../Qt_interface/resources/data/platform_levels.txt");
     if (!file.open(QFile::ReadOnly | QFile::Text)){
         qDebug() << "couldnt read file";
     }
@@ -61,7 +68,7 @@ void MainWindow::readplatform()
 }
 void MainWindow::readinputstate()
 {
-    QFile file("C:/Users/glach/Desktop/griffins_best_effort/resources/data/input_state.txt");
+    QFile file("../Qt_interface/resources/data/input_state.txt");
     if (!file.open(QFile::ReadOnly | QFile::Text)){
         qDebug() << "couldnt read file";
     }
@@ -72,28 +79,31 @@ void MainWindow::readinputstate()
     QRegExp rx("forward: |\\nbackward: |\\ncw: |\\nccw: ");
     QStringList state_list = text.split(rx, QString::SkipEmptyParts);
 
-    QPixmap white("C:/Users/glach/Desktop/griffins_best_effort/resources/static_resources/white.jpg");
-    QPixmap up_arrow("C:/Users/glach/Desktop/griffins_best_effort/resources/static_resources/up.jpg");
-    QPixmap down_arrow("C:/Users/glach/Desktop/griffins_best_effort/resources/static_resources/down.jpg");
-    QPixmap clockwise("C:/Users/glach/Desktop/griffins_best_effort/resources/static_resources/cw.jpg");
-    QPixmap counter_clockwise("C:/Users/glach/Desktop/griffins_best_effort/resources/static_resources/ccw.jpg");
+    QPixmap up_arrow("../Qt_interface/resources/static_resources/up.jpg");
+    QPixmap down_arrow("../Qt_interface/resources/static_resources/down.jpg");
+    QPixmap clockwise("../Qt_interface/resources/static_resources/cw.jpg");
+    QPixmap counter_clockwise("../Qt_interface/resources/static_resources/ccw.jpg");
 
     if (state_list[0] == "1"){
+        ui->up_arrow_label->show();
         ui->up_arrow_label->setPixmap(up_arrow.scaled(50, 50, Qt::KeepAspectRatio));
     } else {
-        ui->up_arrow_label->setPixmap(white.scaled(50, 50, Qt::KeepAspectRatio));
+        ui->up_arrow_label->hide();
     }
     if (state_list[1] == "1"){
+        ui->down_arrow_label->show();
         ui->down_arrow_label->setPixmap(down_arrow.scaled(50, 50, Qt::KeepAspectRatio));
     } else {
-        ui->down_arrow_label->setPixmap(white.scaled(50, 50, Qt::KeepAspectRatio));
+        ui->down_arrow_label->hide();
     }
     if (state_list[2] == "1"){
+        ui->turning_label->show();
         ui->turning_label->setPixmap(clockwise.scaled(100, 100, Qt::KeepAspectRatio));
     } else if (state_list[3] == "1"){
+        ui->turning_label->show();
         ui->turning_label->setPixmap(counter_clockwise.scaled(100, 100, Qt::KeepAspectRatio));
     } else{
-        ui->turning_label->setPixmap(white.scaled(100, 100, Qt::KeepAspectRatio));
+        ui->turning_label->hide();
     }
 
 
