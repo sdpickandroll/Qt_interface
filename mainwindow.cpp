@@ -25,10 +25,8 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(input_state_watcher, SIGNAL(fileChanged(QString)), this, SLOT(readinputstate()));
 
     //placeholder for video
-    int video_width = ui->video_label->width();
-    int video_height = ui->video_label->height();
     QPixmap ron("../Qt_interface/resources/data/ronny_boi.jpg");
-    ui->video_label->setPixmap(ron.scaled(video_width, video_height));
+    ui->video_label->setPixmap(ron.scaled(ui->video_label->width(), ui->video_label->height(), Qt::KeepAspectRatio));
 
 
 }
@@ -86,22 +84,22 @@ void MainWindow::readinputstate()
 
     if (state_list[0] == "1"){
         ui->up_arrow_label->show();
-        ui->up_arrow_label->setPixmap(up_arrow.scaled(50, 50, Qt::KeepAspectRatio));
+        ui->up_arrow_label->setPixmap(up_arrow.scaled(ui->up_arrow_label->width(), ui->up_arrow_label->height(), Qt::KeepAspectRatio));
     } else {
         ui->up_arrow_label->hide();
     }
     if (state_list[1] == "1"){
         ui->down_arrow_label->show();
-        ui->down_arrow_label->setPixmap(down_arrow.scaled(50, 50, Qt::KeepAspectRatio));
+        ui->down_arrow_label->setPixmap(down_arrow.scaled(ui->down_arrow_label->width(), ui->down_arrow_label->height(), Qt::KeepAspectRatio));
     } else {
         ui->down_arrow_label->hide();
     }
     if (state_list[2] == "1"){
         ui->turning_label->show();
-        ui->turning_label->setPixmap(clockwise.scaled(100, 100, Qt::KeepAspectRatio));
+        ui->turning_label->setPixmap(clockwise.scaled(ui->turning_label->width(), ui->turning_label->width(), Qt::KeepAspectRatio));
     } else if (state_list[3] == "1"){
         ui->turning_label->show();
-        ui->turning_label->setPixmap(counter_clockwise.scaled(100, 100, Qt::KeepAspectRatio));
+        ui->turning_label->setPixmap(counter_clockwise.scaled(ui->turning_label->width(), ui->turning_label->height(), Qt::KeepAspectRatio));
     } else{
         ui->turning_label->hide();
     }
@@ -111,3 +109,8 @@ void MainWindow::readinputstate()
     file.close();
 }
 
+
+void MainWindow::on_debugButton_clicked()
+{
+
+}

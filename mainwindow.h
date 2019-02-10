@@ -22,6 +22,9 @@ public slots:
     void readplatform();
     void readinputstate();
 
+private slots:
+    void on_debugButton_clicked();
+
 private:
     Ui::MainWindow *ui;
     QFileSystemWatcher *lipo_watcher;
