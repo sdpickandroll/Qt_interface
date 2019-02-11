@@ -1,4 +1,4 @@
-forward: 1
-backward: 1
-cw: 1
+forward: 0
+backward: 0
+cw: 0
 ccw: 0
