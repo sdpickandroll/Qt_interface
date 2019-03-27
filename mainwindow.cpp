@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "debugwindow.h"
 #include <QFileSystemWatcher>
 #include <QFile>
 #include <QTextStream>
@@ -26,12 +27,6 @@ MainWindow::MainWindow(QWidget *parent) :
     input_state_watcher = new QFileSystemWatcher(this);
     input_state_watcher->addPath("../Qt_interface/resources/data/input_state.txt");
     connect(input_state_watcher, SIGNAL(fileChanged(QString)), this, SLOT(readinputstate()));
-
-//    QStringList debug_list = {"butthole", "soup"};
-
-//    debug_watcher = new QFileSystemWatcher(this);
-//    debug_watcher->addPath("../Qt_interface/resources/data/debug.txt");
-//    connect(debug_watcher, SIGNAL(fileChanged(QString)), this, SLOT(readdebug(debug_list)));
 
     //placeholder for video
     QPixmap ron("../Qt_interface/resources/data/ronny_boi.jpg");
@@ -113,29 +108,12 @@ void MainWindow::readinputstate()
         ui->turning_label->hide();
     }
 
-
-
     file.close();
 }
 
-//void MainWindow::readdebug(QStringList debug_list)
-//{
-//    qDebug("fuck");
-//    qDebug(debug_list);
-//    QFile file("../Qt_interface/resources/data/debug.txt");
-//    if (!file.open(QFile::ReadOnly | QFile::Text)){
-//        qDebug() << "couldnt read file";
-//    }
-////    QTextStream in(&file);
-////    QString line = in.readAll();
-////    debug_list << line;
-////    qDebug() << debug_list;
-
-////    return debug_list;
-//}
-
-
 void MainWindow::on_debugButton_clicked()
 {
-
+    DebugWindow debugwindow;
+    debugwindow.setModal(true);
+    debugwindow.exec();
 }
