@@ -1,3 +1,7 @@
+/**
+ * pick n roll boi
+ */
+
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QFileSystemWatcher>

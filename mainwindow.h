@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QFileSystemWatcher>
+#include <QByteArray>
 #include <QDebug>
 
 namespace Ui {
@@ -18,11 +19,18 @@ public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-public slots:
+public slots
     void readlipo();
     void readplatform();
     void readinputstate();
 //    void readdebug(QStringList debug_list);
+
+    // read pre-formatted QByteArray to the panorama
+    void updatepanorama(
+        const QByteArray* data,
+        const char* format = 0,
+        Qt::ImageConversionFlags flags = Qt::AutoColor
+    );
 
 private slots:
     void on_debugButton_clicked();
