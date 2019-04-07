@@ -5,7 +5,6 @@
 #include <QFile>
 #include <QTextStream>
 #include <QDebug>
-#include <QPixmap>
 #include <QDir>
 
 
@@ -27,11 +26,6 @@ MainWindow::MainWindow(QWidget *parent) :
     input_state_watcher = new QFileSystemWatcher(this);
     input_state_watcher->addPath("../Qt_interface/resources/data/input_state.txt");
     connect(input_state_watcher, SIGNAL(fileChanged(QString)), this, SLOT(readinputstate()));
-
-    //placeholder for video
-    QPixmap ron("../Qt_interface/resources/data/ronny_boi.jpg");
-    ui->video_label->setPixmap(ron.scaled(ui->video_label->width(), ui->video_label->height(), Qt::KeepAspectRatio));
-
 
 }
 

@@ -14,7 +14,6 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    QStringList debug_list;
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
