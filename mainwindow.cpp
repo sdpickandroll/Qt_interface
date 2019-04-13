@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "debugwindow.h"
+#include "QObject"
 #include <QFileSystemWatcher>
 #include <QFile>
 #include <QTextStream>
@@ -18,6 +19,14 @@ MainWindow::MainWindow(QWidget *parent) :
     lipo_watcher = new QFileSystemWatcher(this);
     lipo_watcher->addPath("../Qt_interface/resources/data/lipo_levels.txt");
     connect(lipo_watcher, SIGNAL(fileChanged(QString)), this, SLOT(readlipo()));
+
+    lipo_num = new q_num(this);
+
+
+    connect(lipo_num, SIGNAL(valueChanged(int)), this, SLOT(readlipo2()));
+
+    lipo_num->setValue(50);
+    qDebug() << lipo_num->getValue();
 
     platform_watcher = new QFileSystemWatcher(this);
     platform_watcher->addPath("../Qt_interface/resources/data/platform_levels.txt");
@@ -48,6 +57,11 @@ void MainWindow::readlipo()
     ui->progressBar->setValue(perc);
 
     file.close();
+}
+void MainWindow::readlipo2()
+{
+    int num = lipo_num->getValue();
+    ui->progressBar->setValue(num);
 }
 void MainWindow::readplatform()
 {
