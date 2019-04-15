@@ -16,26 +16,29 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    lipo_watcher = new QFileSystemWatcher(this);
-    lipo_watcher->addPath("../Qt_interface/resources/data/lipo_levels.txt");
-    connect(lipo_watcher, SIGNAL(fileChanged(QString)), this, SLOT(readlipo()));
+    platform_bat = new q_num(this);
+    connect(platform_bat, SIGNAL(valueChanged(int)), this, SLOT(readplatformbat()));
+    platform_bat->setValue(100);
 
-    lipo_num = new q_num(this);
+    platform_forward = new q_bool(this);
+    connect(platform_forward, SIGNAL(valueChanged(bool)), this, SLOT(readplatformforward()));
+    platform_forward->setValue(false);
+    ui->up_arrow_label->hide();
 
+    platform_backward = new q_bool(this);
+    connect(platform_backward, SIGNAL(valueChanged(bool)), this, SLOT(readplatformbackward()));
+    platform_backward->setValue(false);
+    ui->down_arrow_label->hide();
 
-    connect(lipo_num, SIGNAL(valueChanged(int)), this, SLOT(readlipo2()));
+    platform_cw = new q_bool(this);
+    connect(platform_cw, SIGNAL(valueChanged(bool)), this, SLOT(readplatformcw()));
+    platform_cw->setValue(false);
+    ui->turning_label->hide();
 
-    lipo_num->setValue(50);
-    qDebug() << lipo_num->getValue();
-
-    platform_watcher = new QFileSystemWatcher(this);
-    platform_watcher->addPath("../Qt_interface/resources/data/platform_levels.txt");
-    connect(platform_watcher, SIGNAL(fileChanged(QString)), this, SLOT(readplatform()));
-
-    input_state_watcher = new QFileSystemWatcher(this);
-    input_state_watcher->addPath("../Qt_interface/resources/data/input_state.txt");
-    connect(input_state_watcher, SIGNAL(fileChanged(QString)), this, SLOT(readinputstate()));
-
+    platform_ccw = new q_bool(this);
+    connect(platform_ccw, SIGNAL(valueChanged(bool)), this, SLOT(readplatformccw()));
+    platform_ccw->setValue(false);
+    ui->turning_label->hide();
 }
 
 
@@ -44,79 +47,57 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::readlipo()
+void MainWindow::readplatformbat()
 {
-    QFile file("../Qt_interface/resources/data/lipo_levels.txt");
-    if (!file.open(QFile::ReadOnly | QFile::Text)){
-        qDebug() << "couldnt read file";
-    }
-    QTextStream in(&file);
-    QString text = in.readAll();
-    double num = text.toDouble();
-    int perc = num * 100;
-    ui->progressBar->setValue(perc);
-
-    file.close();
+    ui->progressBar_2->setValue(platform_bat->getValue());
 }
-void MainWindow::readlipo2()
-{
-    int num = lipo_num->getValue();
-    ui->progressBar->setValue(num);
-}
-void MainWindow::readplatform()
-{
-    QFile file("../Qt_interface/resources/data/platform_levels.txt");
-    if (!file.open(QFile::ReadOnly | QFile::Text)){
-        qDebug() << "couldnt read file";
-    }
-    QTextStream in(&file);
-    QString text = in.readAll();
-    double num = text.toDouble();
-    int perc = num * 100;
-    ui->progressBar_2->setValue(perc);
 
-    file.close();
-}
-void MainWindow::readinputstate()
+void MainWindow::readplatformforward()
 {
-    QFile file("../Qt_interface/resources/data/input_state.txt");
-    if (!file.open(QFile::ReadOnly | QFile::Text)){
-        qDebug() << "couldnt read file";
-    }
-    QTextStream in(&file);
-    QString text = in.readAll();
-
-    QRegExp rx("forward: |\\nbackward: |\\ncw: |\\nccw: ");
-    QStringList state_list = text.split(rx, QString::SkipEmptyParts);
-
     QPixmap up_arrow("../Qt_interface/resources/static_resources/up.jpg");
-    QPixmap down_arrow("../Qt_interface/resources/static_resources/down.jpg");
-    QPixmap clockwise("../Qt_interface/resources/static_resources/cw.jpg");
-    QPixmap counter_clockwise("../Qt_interface/resources/static_resources/ccw.jpg");
-
-    if (state_list[0] == "1"){
+    bool state = platform_forward->getValue();
+    if (state == true){
         ui->up_arrow_label->show();
         ui->up_arrow_label->setPixmap(up_arrow.scaled(ui->up_arrow_label->width(), ui->up_arrow_label->height(), Qt::KeepAspectRatio));
     } else {
         ui->up_arrow_label->hide();
     }
-    if (state_list[1] == "1"){
+}
+
+void MainWindow::readplatformbackward()
+{
+    QPixmap down_arrow("../Qt_interface/resources/static_resources/down.jpg");
+    bool state = platform_backward->getValue();
+    if (state == true){
         ui->down_arrow_label->show();
         ui->down_arrow_label->setPixmap(down_arrow.scaled(ui->down_arrow_label->width(), ui->down_arrow_label->height(), Qt::KeepAspectRatio));
     } else {
         ui->down_arrow_label->hide();
     }
-    if (state_list[2] == "1"){
+}
+
+void MainWindow::readplatformcw()
+{
+    QPixmap clockwise("../Qt_interface/resources/static_resources/cw.jpg");
+    bool state = platform_cw->getValue();
+    if (state == true){
         ui->turning_label->show();
-        ui->turning_label->setPixmap(clockwise.scaled(ui->turning_label->width(), ui->turning_label->width(), Qt::KeepAspectRatio));
-    } else if (state_list[3] == "1"){
-        ui->turning_label->show();
-        ui->turning_label->setPixmap(counter_clockwise.scaled(ui->turning_label->width(), ui->turning_label->height(), Qt::KeepAspectRatio));
-    } else{
+        ui->turning_label->setPixmap(clockwise.scaled(ui->turning_label->width(), ui->turning_label->height(), Qt::KeepAspectRatio));
+    } else if (platform_cw->getValue() == false && platform_ccw->getValue() == false) {
         ui->turning_label->hide();
     }
+}
 
-    file.close();
+void MainWindow::readplatformccw()
+{
+    QPixmap counter_clockwise("../Qt_interface/resources/static_resources/ccw.jpg");
+    bool state = platform_ccw->getValue();
+    if (state == true){
+        ui->turning_label->show();
+        ui->turning_label->setPixmap(counter_clockwise.scaled(ui->turning_label->width(), ui->turning_label->height(), Qt::KeepAspectRatio));
+    } else if (platform_cw->getValue() == false && platform_ccw->getValue() == false) {
+        ui->turning_label->hide();
+    }
 }
 
 void MainWindow::on_debugButton_clicked()

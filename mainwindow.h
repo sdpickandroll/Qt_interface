@@ -34,6 +34,30 @@ private:
     int i_;
 };
 
+class q_bool : public QObject
+{
+    Q_OBJECT
+    Q_PROPERTY( bool value READ getValue WRITE setValue NOTIFY valueChanged )
+public:
+    explicit q_bool( QObject* parent = nullptr ) :
+        QObject{ parent }, i_{ 0 } {}
+    virtual ~q_bool() {}
+
+    int getValue() const { return i_; }
+public slots:
+    void setValue( bool value )
+    {
+        if ( value != i_ ) {
+            i_ = value;
+            emit valueChanged( i_ );
+        }
+    }
+signals:
+    void valueChanged( bool value );
+private:
+    int i_;
+};
+
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -43,10 +67,11 @@ public:
     ~MainWindow();
 
 public slots:
-    void readlipo();
-    void readlipo2();
-    void readplatform();
-    void readinputstate();
+    void readplatformbat();
+    void readplatformforward();
+    void readplatformbackward();
+    void readplatformcw();
+    void readplatformccw();
 
 
 private slots:
@@ -55,11 +80,12 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
-    QFileSystemWatcher *lipo_watcher;
-    QFileSystemWatcher *platform_watcher;
-    QFileSystemWatcher *input_state_watcher;
 
-    q_num *lipo_num;
+    q_num *platform_bat;
+    q_bool *platform_forward;
+    q_bool *platform_backward;
+    q_bool *platform_cw;
+    q_bool *platform_ccw;
 };
 
 #endif // MAINWINDOW_H

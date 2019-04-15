@@ -23,6 +23,7 @@ private slots:
 
 private:
     Ui::DebugWindow *ui;
+
     QFileSystemWatcher *debug_watcher;
 };
 
